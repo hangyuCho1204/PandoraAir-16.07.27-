@@ -1,0 +1,153 @@
+function verifyApprovalCheckedTopics(){
+	var f = document.formApproval.topic_id;
+	
+	if (f.length == undefined)	 {
+		if (f.checked) {
+			return true;
+		}
+	}
+
+	for (var i = 0; i < f.length; i++) {
+		if (f[i].checked) {
+			return true;
+		}
+	}
+	
+	alert("${gls.getMessage("Approval.SelectTopics")}");
+	return false;
+}
+
+// by mhlee. 2011/01/18
+function updateBoardDesc(){
+
+	if( document.formBoardDesc.board_desc.value == "" )
+	{
+		alert("설명글을 입력하십시오.");
+		document.formBoardDesc.board_desc.focus();
+		return false;
+	}
+	
+	return true;
+}
+
+// by mhlee. 2011/05/11
+function validateApprovalTempSave(){
+	var status = verifyApprovalCheckedTopics()
+		&& confirm("임시저장하시겠습니까?");
+
+	if (status) {
+		document.formApproval.log_type.value = "1";
+	}
+
+	return status;
+}
+
+function validateApprovalDelete(){
+	var status = verifyApprovalCheckedTopics()
+		&& confirm("${gls.getMessage("Approval.ConfirmDelete")}")
+		&& askApprovalReason();
+
+	if (status) {
+		document.formApproval.log_type.value = "1";
+	}
+
+	return status;
+}
+
+function validateApprovalRestore(){
+	var status = verifyApprovalCheckedTopics()
+		&& confirm("복원 하시겠습니까?")
+		&& askApprovalReason();
+
+	if (status) {
+		document.formApproval.log_type.value = "1";
+	}
+
+	return status;
+}
+
+
+function validateApprovalTempDelete(){
+	var status = verifyApprovalCheckedTopics()
+		&& confirm("임시 삭제하시겠습니까?");
+
+	if (status) {
+		document.formApproval.log_type.value = "1";
+	}
+
+	return status;
+}
+
+function lockUnlock() {
+	var status = verifyApprovalCheckedTopics() && askApprovalReason();
+	
+	if (status) {
+		document.formApproval.log_type.value = "3";
+	}
+
+	return status;
+}
+
+function moveTopic() {
+	var status = verifyApprovalCheckedTopics();
+	
+	if (status) {
+		document.formApproval.log_type.value = "0";
+	}
+
+	return status;
+}
+
+//커뮤니티내 전체 게시판 상단에 게시 노출/mrjoo/beans/091009
+function exposeTopic() {
+	var	status = verifyApprovalCheckedTopics();
+
+	if(status) {
+		document.formApproval.log_type.value = "6";
+	}
+
+	return status;
+}
+
+function askApprovalReason() {
+	var message = "${gls.getMessage("ApprovalLog.typeDeleted")}";
+
+	if (message == null || message == "") {
+		document.formApproval.log_description.value = "${gls.getMessage("ApprovalLog.typeDeleted")}";
+		return false;
+	}	else {
+		document.formApproval.log_description.value = message;
+	}
+
+	return true;
+}
+
+var oldClasses = {}
+
+function changeTrClass(from, trIndex){
+	var tr = from.parentNode.parentNode;
+	trIndex = trIndex.toString();
+
+	if (from.checked) {
+		tr.className = "approval_highlight";
+		oldClasses[trIndex] = new Array();
+
+		for (var i = 0; i < tr.childNodes.length; i++) {
+			var node = tr.childNodes[i];
+
+			if (node.nodeName.toUpperCase() == "TD") {
+				oldClasses[trIndex].push(node.className);
+				node.className = "";
+			}
+		}
+	}	else {
+		tr.className = "";
+		for (var i = tr.childNodes.length - 1; i >= 0; i--) {
+			var node = tr.childNodes[i];
+
+			if (node.nodeName.toUpperCase() == "TD") {
+				node.className = oldClasses[trIndex].pop();
+			}
+		}
+	}	
+}

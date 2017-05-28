@@ -1,0 +1,78 @@
+/********** layer-popup 설정 **********/
+
+// layer-popup 띄우기
+docWidth = 310;		//절대위치 지정
+docHeight = 115;	//절대위치 지정
+//docWidth = document.body.clientWidth * 0.41;		//상대위치 지정(explorer 8.0 에서는 안 먹음)
+//docHeight = document.body.clientHeight * 0.305;	//상대위치 지정(explorer 8.0 에서는 안 먹음)
+
+var popHtml = "<div id='laypop' style='position:absolute; left:" + docWidth + "px; top:" + docHeight + "px; border:5px solid #CCC;'>"
+		+ '<img src="\/templates\/default\/img\/pop\/bg_OneYear_20100518.jpg" usemap="#popMap" \/>'
+		+ "<p class='close'><input type='checkbox' id='close' onclick='close_popLayer_today()' tabindex='1' /> <label for='close'>오늘 하루 이 창을 열지않습니다.</label> <a href='#void' onclick='close_popLayer();' tabindex='2'><img src='/templates/default/img/pop/btn_stop_comm_close.gif' alt='닫기' \/><\/a><\/p>"
+		+ '<map name="popMap" id="popMap">'
+		+ '		<area shape="rect" coords="77,154,307,174" href="http:\/\/neolook.net\/archives\/20100518d" target="_blank" \/>'
+		+ '		<area shape="rect" coords="75,215,327,235" href="http:\/\/www.nl.go.kr\/open_policy\/onRoad_reg.php" target="_blank" \/>'
+		+ '		<area shape="rect" coords="76,243,284,263" href="http:\/\/www.nl.go.kr\/conference2010\/" target="_blank" \/>'
+		+ '<\/map>'
+	+ "<\/div>";
+
+function close_popLayer_today() {
+	setCookie( 'Notice', 'done' , 1);
+	close_popLayer();
+}
+
+function close_popLayer() {
+	document.getElementById("laypop").style.display = "none";
+	document.getElementById("laypop").innerHTML = "";
+}
+
+/********** 쿠키값처리관련 function **********/
+
+//쿠키값 가져오기
+function getCookie(key) {
+	//alert("KEY : " +key);
+	var cook = document.cookie + ";";
+	var idx = cook.indexOf(key,0);
+	var val = "";
+
+	if(idx != -1) {
+		cook = cook.substring(idx, cook.length);
+		begin = cook.indexOf("=", 0) + 1;
+		end = cook.indexOf(";", begin);
+		val = unescape(cook.substring(begin,end));
+	}
+	//alert("KEY : " +val);
+	return val;
+}
+
+//쿠키값 설정
+function setCookie(name, value, expiredays) {
+	var today = new Date();
+	today.setDate(today.getDate() + expiredays);
+	document.cookie = name + "=" + escape(value)+"; path=/; expires=" + today.toGMTString()+";"
+}
+
+//쿠키에서 로그인 정보 가져오기
+function getLogin() {
+	var frm = document.formlogin;
+	//userid 쿠키에서 id 값을 가져온다.
+	var id = getCookie("userid");
+	//alert("get : " +id);
+	//가져온 쿠키값이 있으면
+	if(id != "") {
+		frm.userid.value = id;
+		frm.saveid.checked =true;
+	}
+}
+
+//쿠키에 로그인 정보 저장
+function saveLogin(id) {
+	if(id != "") {
+		//tpartyid 쿠키에 id 값을 7일간 저장
+		setCookie("userid", id, 7);
+	}
+	else {
+		//tpartyid 쿠키 삭제
+		setCookie("userid", id, -1);
+	}
+}

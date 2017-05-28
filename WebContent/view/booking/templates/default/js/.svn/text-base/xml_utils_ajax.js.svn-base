@@ -1,0 +1,17 @@
+<#if ajax_mode == "test">
+	alert('${gls.getMessage(titleStr)!(titleStr + " : not found on property file")}');
+<#elseif ajax_mode == "apply">
+	$('#div_' + modeVal() + ' div.TopTitle').html('${gls.getMessage(page_title)!""}');
+	$(modeVal()).attr('title', '${(gls.getMessage(page_title)??)?string(page_title, "")}');
+	var selector_1 = (modeVal() == 'list')
+					? '#listHeader th' : '#div_' + modeVal() + ' div.preview b';
+	var selector_2 = modeVal() + (modeVal() == 'list' ? ' column' : ' input');
+	<#list element_title as title>
+		$(selector_1 + ':eq(${title_index})').html('${gls.getMessage(title)!""}');
+		<#if !gls.getMessage(title)??>
+			$(selector_2 + ':eq(${title_index})').attr('title', '');
+		</#if>
+	</#list>
+	prepareXML();
+	prepareHTML();
+</#if>

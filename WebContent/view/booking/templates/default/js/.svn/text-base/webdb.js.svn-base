@@ -1,0 +1,226 @@
+function db_Link(link_url, encrypt)
+{
+  if(link_url == "461") {
+	dbpia_open(461);
+  }else if(link_url == "DBpia"){
+    document.form1.action = "http://www.dbpia.co.kr/member/login_proc_ex.asp";
+    document.form1.userid.value = "nlok";
+    document.form1.passwd.value = "nlok1771";
+    document.form1.libid.value = "461";
+    document.form1.libname.value = "국립중앙도서관";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "newnonmun"){
+    document.form1.action = "http://newnonmun.com/admin_tool/loginpass2.php";
+    document.form1.newnonmun_ID.value = "nlnl";
+    document.form1.newnonmun_PW.value = "nl2006";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "ebscohost"){
+  	document.form1.action = "http://search.ebscohost.com/login.asp?profile=ehost&user=nl&password=nldb";
+  	document.form1.target="mashup";
+  	document.form1.submit();
+  }else if(link_url == "ebscohost-aph"){
+  	//document.form1.action = "http://search.ebscohost.com/login.asp?profile=ehost&defaultdb=aph";
+  	//document.form1.target="mashup";
+  	//document.form1.submit();
+	ebchost_link("http://search.ebscohost.com/login.aspx?profile=ehost&defaultdb=aph");
+  }else if(link_url == "ebscohost-buh"){
+  	//document.form1.action = "http://search.ebscohost.com/login.aspx?profile=ehost&defaultdb=buh";
+  	//document.form1.target="_blank";
+  	//document.form1.submit();
+	ebchost_link("http://search.ebscohost.com/login.aspx?profile=ehost&defaultdb=buh");
+  }else if(link_url == "ebscohost-lih"){
+  	//document.form1.action = "http://search.ebscohost.com/login.asp?profile=ehost&defaultdb=lih";
+  	//document.form1.target="mashup";
+  	//document.form1.submit();
+	ebchost_link("http://search.ebscohost.com/login.aspx?profile=ehost&defaultdb=lih");
+  }else if(link_url == "ebscohost-lif"){
+  	//document.form1.action = "http://search.ebscohost.com/login.asp?profile=ehost&defaultdb=lif";
+  	//document.form1.target="mashup";
+  	//document.form1.submit();
+	ebchost_link("http://search.ebscohost.com/login.aspx?profile=ehost&defaultdb=llf");
+  }else if(link_url == "ebscohost-aft"){
+  	//document.form1.action = "http://search.ebscohost.com/login.asp?profile=ehost&defaultdb=aft";
+  	//document.form1.target="mashup";
+  	//document.form1.submit();
+	ebchost_link("http://search.ebscohost.com/login.aspx?profile=ehost&defaultdb=aft");
+  }else if(link_url == "LISTA"){
+  	document.form1.action = "http://search.ebscohost.com/login.asp?profile=ehost&defaultdb=lih&user=nl&password=nldb";
+  	document.form1.target="mashup";
+  	document.form1.submit();
+  }else if(link_url == "DDRS"){
+  	document.form1.action = "http://infotrac.galegroup.com/itweb/tnlk";
+  	document.form1.db.value = "DDRS";
+  	document.form1.id.value = "education";
+  	document.form1.target="mashup";
+  	document.form1.submit();
+  }else if(link_url == "GVRL"){
+  	document.form1.action = "http://infotrac.galegroup.com/itweb/tnlk";
+  	document.form1.db.value = "GVRL";
+  	document.form1.id.value = "education";
+  	document.form1.target="mashup";
+  	document.form1.submit();
+  }else if(link_url == "TERC"){
+  	document.form1.action = "http://infotrac.galegroup.com/itweb/tnlk";
+  	document.form1.db.value = "TERC";
+  	document.form1.id.value = "education";
+  	document.form1.target="mashup";
+  	document.form1.submit();
+  }else if(link_url == "KISS"){
+  	document.form1.action = "http://kiss.kstudy.com";
+  	document.form1.code.value = "3146";//"0158";
+  	document.form1.c_code.value = encrypt; // by mhlee. 2011/07/26
+  	document.form1.target="mashup";
+  	document.form1.submit();
+  }else if(link_url == "PROQ-ABI"){
+	document.form1.action = "http://search.proquest.com/abicomplete?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-ARL"){
+	document.form1.action = "http://search.proquest.com/pqrl?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PSJ"){
+	document.form1.action = "http://search.proquest.com/sciencejournals?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PN"){
+	document.form1.action = "http://search.proquest.com/newsstand?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PBJ"){
+	document.form1.action = "http://search.proquest.com/biologyjournals?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PC"){
+	document.form1.action = "http://search.proquest.com/computing?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PCE"){
+	document.form1.action = "http://search.proquest.com/pqcentral?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PEJ"){
+	document.form1.action = "http://search.proquest.com/education?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PMC"){
+	document.form1.action = "http://search.proquest.com/military?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PPJ"){
+	document.form1.action = "http://search.proquest.com/psychologyshell?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PR"){
+	document.form1.action = "http://search.proquest.com/religion?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PNAHS"){
+	document.form1.action = "http://search.proquest.com/nursing?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "PROQ-PHMC"){
+	document.form1.action = "http://search.proquest.com/healthcomplete?accountid=8015";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "NYT"){
+	document.form1.action = "http://search.proquest.com/publication/11561";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "SCMP"){
+	//document.form1.action = "http://proquest.umi.com/pqdweb?ReqType=301&JSEnabled=1&COPT=REJTPTQwOCZJTlQ9MCZWRVI9Mg==&clientId=22310 ";
+	document.form1.action = "http://search.proquest.com/publication/26858";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "TWP"){
+	//document.form1.action = "http://proquest.umi.com/pqdweb?ReqType=301&JSEnabled=1&COPT=REJTPTQwOCZJTlQ9MCZWRVI9Mg==&clientId=22310";
+	document.form1.action = "http://search.proquest.com/publication/10327";
+	//document.form1.UserId.value = "FB8H7C96M9";//46MMW8298V
+    //document.form1.Passwd.value = "welcome";
+	document.form1.username.value = "FB8H7C96M9";//46MMW8298V
+    document.form1.password.value = "welcome";
+    document.form1.Passwd.value = "welcome";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }else if(link_url == "ORO"){
+    document.form1.action = "http://www.oxfordreference.com/views/GLOBAL.html";
+    document.form1.target="mashup";
+    document.form1.submit();
+  }
+}
+
+
+function ebchost_link(url) {
+	var anchor = document.createElement("a");
+	if (!anchor.click) {
+		top.location.href = url;
+		return;
+	}
+	anchor.setAttribute("href", url);
+	anchor.setAttribute("target", "_blank");
+	document.getElementById("container").appendChild(anchor);
+	anchor.style.display = "none";
+	anchor.click();
+}

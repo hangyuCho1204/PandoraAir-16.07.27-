@@ -1,0 +1,346 @@
+
+
+$.fn.extend({
+	chk: function(selecter) {
+		var ret = [],stack = this;
+		if(selecter === "length"){
+			alert(this.length);return this;
+		}
+		for (i=0;i<stack.length;i++ )
+			ret.push(stack[i][selecter]);
+		alert(ret);
+		return this;
+	}
+});
+$.extend({
+    validateStatus: 0,
+    outerHTML: function (a) {
+        var b = a;
+        var c = b.outerHTML,
+            ownerDocument = b.ownerDocument;
+        if (!c) {
+            var d = ownerDocument.createElement("div");
+            d.appendChild(b.cloneNode(true));
+            c = d.innerHTML
+        }
+        return c
+    },
+    validate: function (d) {
+        var e = [];
+        var f = function (a) {
+            return ($.outerHTML(a).replace(/(<)/g, "&lt;").split(">&lt;")[0] + ">").replace(">>", ">")
+        };
+        if($('title')[0]){
+	        var g = $('title')[0].innerHTML;
+	        if (g == "") {
+	            e.push("<h4>TITLE 태그 오류</h4>&lt;title>&lt;/title><span> 페이지의 title 값이 비어있습니다. </span>")
+	        };
+        }else{
+        	 e.push("<h4>TITLE 태그 오류</h4>&lt;title>&lt;/title><span> 태그가 페이지에 없습니다. </span>");
+
+        }
+        if (!d || d == "a") {
+            var h = 0,
+                onlysharpTxt = [],
+                blink = 0,
+                javaTxt = "";
+            $('a').each(function () {
+                if ($.outerHTML(this).indexOf('javascript') > 0) {
+                    var a = f(this);
+                    javaTxt += a + " <span> href안에 javascript가 들어가면 안되요 </span>";
+                    $(this).addClass("krValidateErr")
+                }
+                if ($.outerHTML(this).indexOf('href=""') > 0 || $.outerHTML(this).indexOf("href=''") > 0) {
+                    $(this).addClass("krValidateErr");
+                    blink++
+                }
+                if (this.href.split('#')[1] == "") {
+                    h++;
+                    onlysharpTxt.push(f(this));
+                    $(this).addClass("krValidateErr")
+                }
+            });
+            if (e == null || h > 0 || blink > 0 || javaTxt !="") e.push("<h4>A 태그 오류</h4>");
+            if (h > 0) $(onlysharpTxt).each(function (i) {
+                e.push(onlysharpTxt[i] + "  <span> href안에 # 만 들어가면 안되요 &nbsp; &nbsp; &nbsp; &nbsp; " + h + "번 쓰임 </span>")
+            });
+            if (blink > 0) {
+                e.push("<span> href 값이 비어있으면 안되요  &nbsp; &nbsp; &nbsp; &nbsp; " + blink + "번 쓰임 </span>")
+            };
+            if (javaTxt != "") {
+                e.push(javaTxt)
+            };
+            var h = 0,
+                onlysharpTxt = [],
+                blink = 0,
+                javaTxt = "";
+            $('map').each(function () {
+                var b = $(this).find("area");
+                b.each(function () {
+                    if (this.alt == "") {
+                        $(this).addClass("krValidateErr");
+                        e.push(f(this) + "<span>&lt;AREA> 의 alt 값이 비어있습니다.</span>")
+                    }
+                    if ($.outerHTML(this).indexOf('javascript') > 0) {
+                        var a = f(this);
+                        javaTxt += a + " <span> href안에 javascript가 들어가면 안되요 </span>";
+                        $(this).addClass("krValidateErr")
+                    }
+                    if ($.outerHTML(this).indexOf('href=""') > 0 || $.outerHTML(this).indexOf("href=''") > 0) {
+                        $(this).addClass("krValidateErr");
+                        blink++
+                    };
+                    if (this.href.split('#')[1] == "") {
+                        $(this).addClass("krValidateErr");
+                        e.push(f(this) + "  <span> href안에 # 만 들어가면 안되요 &nbsp; &nbsp; &nbsp; &nbsp; </span>")
+                    }
+                })
+            });
+            if (blink > 0) e.push(" <span> href 값이 비어있으면 안되요  &nbsp; &nbsp; &nbsp; &nbsp; " + blink + "번 쓰임 </span>");
+            if (javaTxt != "") e.push(javaTxt)
+        }
+        if (!d || d == "img") {
+            var j = 0;
+            $('img').each(function () {
+				if(this.onclick){
+
+					e.push(f(this) + "<span> 이미지에 onclick 이벤트가 들어있으면 안되요^^ </span>")
+				}
+                if (this.alt == "") {
+                    j++;
+                    if (j == 1) e.push("<h4>IMG 태그 오류</h4>");
+                    var a = f(this);
+                    e.push(a + " <span>alt 값이 비어있어요 </span>");
+                    $(this).addClass("krValidateErr")
+                }
+            });
+            if (j > 0) e.push("<em>alt 값이 " + j + "번  비어있음 </em>")
+        }
+        if (!d || d == "form") {
+            var k = [];
+            $('form').each(function () {
+                if (this.action == "") {
+                    $(this).addClass("krValidateErr");
+                    k.push(($.outerHTML(this).split("><")[0] + ">").replace(/(<)/g, "&lt;").replace(/(>)/g, "&gt;") + " <span>< form > 태그의 action값이 비어있습니다 </span> ")
+                }
+            });
+            var l = [];
+            $('label').each(function () {
+                var a = /for=[a-z|A-Z|_|0-9|"|'|]+/i.exec($.outerHTML(this));
+				var b = a[0].split("=")[1].replace(/["|']/g,"");
+				for (i=0;i<l.length;i++) if(b ==l[i]) b=null;
+				if(b!=null) l.push(b);
+            });
+            var m = [];
+            function chkInput(a) {
+                var b;
+                if (a.type == "hidden") return false;
+                if (a.type == "image") return false;
+				a.id = $.trim(a.id);
+                $(l).each(function (i) {
+                    if (this == a.id.replace(/\s/,"")) {
+                        l[i] = "|none|";
+                        b = a;
+                    }
+                });
+                if (l) l = l.join(',').replace(",|none|", '').replace("|none|", '').replace(/^,/, '').split(',');
+                if (l == "") l = null;
+                if (b != a) {
+                    if (a.title == "") {
+                        var c = f(a);
+                        $(a).addClass("krValidateErr")
+                        k.push(c + "<span>Lavel 이나 title둘중하나는 적용되어야합니다.</span> ");
+                    }
+                }
+            }
+            $('input').each(function () {
+                chkInput(this)
+            });
+            $('select').each(function () {
+                chkInput(this)
+            });
+            $('textarea').each(function () {
+                chkInput(this)
+            });
+            $('input[type=image]').each(function () {
+                if (this.alt == "") {
+                    k.push("src=" + this.src.replace(location.protocol, "") + "<span> alt 값이 빠져있습니다. </span>");
+                    $(this).addClass("krValidateErr")
+                }
+            });
+            if (k.length > 0 || (l !=null && l.length)) e.push("<h4>FORM 태그 오류</h4>");
+            $(k).each(function () {
+                e.push(this)
+            });
+            if (l != null) {
+                $(l).each(function () {
+                    e.push("&lt;label for=" + this + "&gt;  <span>이 가리키는 INPUT or SELECTBOX or TEXTAREA 가 없습니다.</span>")
+                })
+            }
+        }
+        var n = $('table'),
+            tableErr = [];
+        n.each(function () {
+            var a = $(this);
+            if (this.summary == "") {
+                tableErr.push(f(this) + "  <span>table의 summary 정보가 없습니다. </span>")
+            }
+            if (!a.find('>caption')[0] || a.find('>caption').html() == "") {
+                tableErr.push(f(this) + " <span>table의 caption 정보가 없습니다. </span>")
+            }
+            a.find('th').each(function () {
+                if ($(this).attr('scope') == "") {
+                    tableErr.push(f(this) + " <span>Th의 scope 정보가 없습니다. </span>")
+                }
+            })
+        });
+        if (tableErr.length > 0) {
+            e.push("<h4>TABLE 태그 오류</h4>")
+        }
+        $(tableErr).each(function () {
+            e.push(this)
+        });
+        this.resultBox = $('<div id="krValidate" >');
+        var o = $('<div id="krValidate_bg" >');
+        var p = document.body.parentNode.offsetWidth;
+        this.resultBox.css({
+            zIndex: 9900,
+            cursor: "move",
+            position: "absolute",
+            top: "0",
+            left: "-500"
+        });
+        o.css({
+            opacity: 0.8,
+            background: '#000',
+            width: "100%",
+            left: "0",
+            top: "0",
+            height: "1000px",
+            position: "absolute",
+            zIndex: 9800
+        });
+        var q = '	<div id="krValiHeader"><h1 ><img src="http://krcode.co.cc/kr/validate/img/logo.gif" width="391" height="57" alt="KRCODE Validate" /></h1></div>';
+        q += '<div id="krValiContainer"><div id="krValiContent">';
+        q += '		<h3 class="krValiTit"><img src="http://krcode.co.cc/kr/validate/img/tit_err.gif" alt="" /></h3>';
+        q += '		<div id="krValiBox">';
+        q += '		</div>';
+        q += '		<div id="noErr" style="display:none;">';
+        q += '			<img src="http://krcode.co.cc/kr/validate/img/good.gif" width="183" height="170" alt="" />';
+        q += '		</div>';
+        q += '	</div></div>';
+        q += '	<div id="krValiFooter"><img src="http://krcode.co.cc/kr/validate/img/footer.gif"  alt="copyright((c)krcode. all rights reserved" /></div>';
+        this.resultTxt = e;
+        this.tag = q
+    },
+    actveChk: function () {
+        if ($.validateStatus == 0) {
+            $.validate();
+            $('body').append(this.resultBox);
+            this.resultBox[0].innerHTML = this.tag;
+            for (i = 0; i < this.resultTxt.length; i++) {
+                var c = this.resultTxt[i];
+                $('#krValiBox')[0].innerHTML += c
+            }
+            if (this.resultTxt.length > 0) {} else {
+                $('#krValiBox').hide();
+                $('#noErr').show()
+            }
+            this.resultBox.css({
+                opacity: 0,
+                left: -500
+            }).animate({
+                left: (0),
+                opacity: 1
+            }, 300);
+            jQuery(function ($) {
+				/*
+               try{
+					$('#krValidate').css({
+						marginTop: 0
+					}).bind('drag',function( event ){
+						$( this ).css({
+							top: event.offsetY,
+							left: event.offsetX
+							});
+					},{
+						not: '#krValiBox'
+					});
+			   }catch(e){
+			   }
+			   */
+				$('#krValidate').css({
+					marginTop: 0
+				})
+            });
+            $('.krValidateErr').each(function (i) {
+                var a = $(this);
+				a.css({display:'block'})
+                a.hei = a.height();
+                if (a.offset().top < 100) a.before('<a href="#close" class="krValidateErrImgClose"><img src="http://krcode.co.cc/kr/validate/img/err2.gif" class="krValidateErrIMG" style="position:absolute; margin:' + (a.hei-6) + 'px 0 0 -20px; z-index:100000;" alt="여기에러" /></a>');
+                else a.before('<a href="#close" class="krValidateErrImgClose"><img src="http://krcode.co.cc/kr/validate/img/err.gif" class="krValidateErrIMG" style="position:absolute; margin:-40px 0 0 -20px;" alt="여기에러" /></a>')
+            });
+            $(".krValidateErrImgClose").click(function () {
+                this.style.display = "none"
+            });
+            $.validateStatus = 1
+        } else if ($.validateStatus == 2) {
+            $('body').append(this.resultBox);
+            this.resultBox.css({
+                opacity: 0,
+                left: -500
+            }).animate({
+                left: (0),
+                opacity: 1
+            }, 300);
+            $(".krValidateErrImgClose").show();
+            $.validateStatus = 1
+        } else {
+			$(".krValidateErr").removeClass('krValidateErr')
+            var d = $('#krValidate')[0];
+            if (d) {
+                d.parentNode.removeChild(d);
+                $.validateStatus = 2
+            }
+            $(".krValidateErrImgClose").hide();
+        }
+    }
+});
+function checkKey(e){
+		//단축키를 실제로 처리하는 부분
+		var tar = e.target || e.srcElement,key = e.keyCode;
+		if(key == 39 || key == 37){
+			if(e.shiftKey == true && e.ctrlKey == true){
+				$.actveChk();
+			}
+		}
+}
+
+$(function(){
+	$(this).keydown(checkKey);
+	var style = "<style type='text/css'>";
+	style += "\n#krValidate{width:510px; border:7px solid #c8c8c8; background:#080808; padding:0 10px 20px;  margin:0 auto; margin-top:30px; }";
+	style += "\n#krValidate *{margin:0; padding:0; color:#DBDBDB; font-family:dotum, sans-serif; font-size:12px; line-height:120%;}";
+	style += "\n#krValidate #krValiHeader{width:100%; height:84px; text-align:center; position:relative;}";
+	style += "\n#krValidate #krValiHeader h1{padding:20px 0 0 0;}";
+	style += "\n#krValidate #krValiContainer{width:100%; position:relative; background:url(http://krcode.co.cc/kr/validate/img/body_bg.gif) repeat-y 0 0;  }";
+	style += "\n#krValidate h3.krValiTit{height:60px; position:relative; left:-15px;}";
+	style += "\n#krValidate #krValiContent{padding:0px 0 20px 15px; background:url(http://krcode.co.cc/kr/validate/img/body_bg.gif) no-repeat 0 0; background:url(http://krcode.co.cc/kr/validate/img/bg_top.gif) no-repeat 0 0;  }";
+	style += "\n#krValidate #krValiContent div#krValiBox{width:470px; background:#5A5A5A; color:#8ACFFF; padding:5px; border:2px solid #838383; cursor:text }";
+	style += "\n#krValidate #krValiContent div#krValiBox h4{font-weight:bold; font-size:16px; color:#A5B8D0; height:20px; border-bottom:3px solid #DFF0FB; margin:10px 0 10px;;}";
+	style += "\n#krValidate #krValiContent div#krValiBox hr{display:none;}";
+	style += "\n#krValidate #krValiContent div#krValiBox span{padding-left:40px; display:block;}";
+	style += "\n#krValidate #krValiContent div#krValiBox em	{font-weight:bold; color:#E27B7B}";
+	style += "\n#krValidate #krValiContent #noErr{text-align:center; padding:30px 0 0 0;}";
+	style += "\n#krValidate #krValiFooter{width:100%; text-align:center; padding:30px 0 0 0; background:url(http://krcode.co.cc/kr/validate/img/bt_bg.gif) no-repeat -1px 0; }";
+	// err pointer;
+	style += "input.krValidateErr,select.krValidateErr,textarea.krValidateErr {background:#111; color:#fff; }";
+	style += "img.krValidateErr{border:1px solid #111; position:relative;; }";
+	style += "a.krValidateErr{border:1px solid #111}";
+	style += ".krValidateErr{}";
+	style += "table.krValidateErr{border:1px solid #111}";
+	style += "th.krValidateErr{background:#111; color:#fff; }";
+	style += "</style>";
+	$('body').prepend(style);
+	//$.validate();
+});

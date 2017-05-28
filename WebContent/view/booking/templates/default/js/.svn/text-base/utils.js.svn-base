@@ -1,0 +1,230 @@
+function showEmail(beforeAt, afterAt){
+	return beforeAt + "@" + afterAt;
+}
+/*
+var starOn = new Image();
+starOn.src = "${contextPath}/templates/${templateName}/images/${language}/star_on.gif";
+
+var starOff = new Image();
+starOff.src = "${contextPath}/templates/${templateName}/images/${language}/star_off.gif";
+*/
+function writeStars(q, postId){
+	for (var i = 0; i < 5; i++) {
+		var name = "star" + postId + "_" + i;
+		document.write("<img name=\"" + name + "\" alt=\"*\" />");
+		//document.images[name].src = q > i ? starOn.src : starOff.src;
+	}
+}
+
+function addBookmark(relationType, relationId){
+	var w = window.open('${DPortalContext.encodeURL("/bookmarks/insert/' + relationType + '/' + relationId + '")}', 'bookmark_add', 'width=700, height=200, scrollbars=auto, resizable=true');
+	w.focus();
+}
+function addCommBookmark(relationType, relationId, commId){
+	//alert(commId);
+	//alert('${DPortalContext.encodeURL("/bookmarks/insertComm/' + relationType + '/' + relationId + '/' + commId +'")}');
+	var w = window.open('${DPortalContext.encodeURL("/bookmarks/insertComm/' + relationType + '/' + relationId + '/' + commId +'")}', 'bookmark_add', 'width=700, height=200, scrollbars=auto, resizable=true');
+	w.focus();
+}
+
+function findaddr(){
+	var w = window.open('${DPortalContext.encodeURL("/user/findzip")}', 'find_address', 'width=700, height=400, scrollbars=1, resizable=true, status=1');
+	w.focus();
+}
+
+/** ---------------------------------------------
+ *  정상적인 URL인지 체크
+ * 정상 예1) http://www.naver.com
+ * 정상 예2) http://www.naver.com/index.html
+ * 정상 예3) http://naver.co.kr
+ * 정상 예4) www.naver.com
+ * 정상 예5) naver.com
+ * 정상 예6) http://blog.naver.com/
+ * 비정상 예1) http:/www.naver.com
+ * 비정상 예2) http://www.naver.com2
+ * 비정상 예3) mailto://www.naver.com
+ **********************************************/
+function checkDetailUrl(strUrl) {
+	//alert(strUrl);
+    var expUrl = /^(http\:\/\/)?((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us)(\/(\w*))*$/i;
+    return expUrl.test(strUrl);
+}
+/***********************************************
+ * IP 유효성 체크
+ * ---------------------------------------------
+ *  정상적인 IP인지 체크
+ * 정상 예1) 222.107.254.169
+ * 정상 예2) 222.7.54.69
+ * 비정상 예1) 022.107.254.169
+ * 비정상 예2) 222107.254.169
+ * 비정상 예3) 222.107.254.1699
+ * 비정상 예4) 222.107.254.
+ * 비정상 예5) 222.107.254
+ * 비정상 예6) 222.107.254.169:80
+ **********************************************/
+function checkIP(strIP) {
+	//alert(strIP);
+    var expUrl = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/;
+    return expUrl.test(strIP);
+}
+
+function checkIP(strIP) {
+	//alert(strIP);
+    var expUrl = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/;
+    return expUrl.test(strIP);
+}
+
+// 이메일 체크
+function checkEMail(strMail) {
+   /** 체크사항
+     - @가 2개이상일 경우
+     - .이 붙어서 나오는 경우
+     -  @.나  .@이 존재하는 경우
+     - 맨처음이.인 경우
+     - @이전에 하나이상의 문자가 있어야 함
+     - @가 하나있어야 함
+     - Domain명에 .이 하나 이상 있어야 함
+     - Domain명의 마지막 문자는 영문자 2~4개이어야 함 **/
+
+    var check1 = /(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/;
+
+    var check2 = /^[a-zA-Z0-9\-\.\_]+\@[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,4})$/;
+
+    return ( !check1.test(strMail) && check2.test(strMail) )
+
+}
+function download(attId){
+	location = '${DPortalContext.encodeURL("/posts/downloadAttach/' + attId + '")}';
+}
+
+function atozBoardShow(atozValue, start){
+	var f = document.atoz;
+	f.atoz_value.value = atozValue;
+	f.start.value = start;
+
+	f.method='post';
+	f.submit();
+}
+
+function atozBoardShow(atozValue, start){
+	var f = document.atoz;
+	f.atoz_value.value = atozValue;
+	f.start.value = start;
+
+	f.method='post';
+	f.submit();
+}
+
+/*게시판내검색시 페이징하기-mrjoo/090818*/
+function searchBoard(start){
+	var f = document.formSearch;
+	f.start.value = start;
+
+	f.method='post';
+	f.submit();
+}
+
+function atozApproval(atozValue, start){
+	var f = document.approval;
+	f.atoz_value.value = atozValue;
+	f.start.value = start;
+
+	f.method='post';
+	f.submit();
+}
+
+function searchApproval(start){
+	var f = document.approval;
+	//f.atoz_value.value = atozValue;
+	//f.start.value = start;
+
+	f.method='post';
+	f.submit();
+}
+
+
+function openCalendar(fieldName) {
+	var	popheight = 200;
+	var	popwidth = 250;
+	var	poptop = (screen.height - popheight) / 2 - 40;
+	var	popleft = (screen.width - popwidth) / 2;
+
+	if(poptop < 0) { poptop = 0; }
+	var	winprops = "height=" + popheight + ",width=" + popwidth + ","
+			+ "top=" + poptop + ",left=" + popleft + ","
+			+ "toolbar=no,resize=no,location=no,scrollbars=no,status=no";
+	var	winurl = "${contextPath}/templates/${templateName}/pop_calendar.htm?field=" + fieldName;
+
+	var	win_calendar = window.open(winurl, "win_calendar", winprops);
+	win_calendar.focus();
+}
+
+/**지정된 영역을 별도의 창을 띄워 인쇄**/
+function openPrint(argAreaId) {
+	var	popwidth = 700;
+	var	popheight = 700;
+	var	poptop = (screen.height - popheight) / 2 - 40;
+	var	popleft = (screen.width - popwidth) / 2;
+
+	if(poptop < 0) { poptop = 0; }
+
+	var	winprops = "height=" + popheight + ",width=" + popwidth + ","
+			+ "top=" + poptop + ",left=" + popleft + ","
+			+ "toolbar=no,resize=yes,location=no,scrollbars=yes,status=no";
+	var	winurl = "${contextPath}/templates/${templateName}/print_post.htm?areaid=" + argAreaId;
+	var	pop_win = window.open(winurl, "pop_win", winprops);
+}
+
+/***** 덧글수정을 위한 처리 start *****/
+
+var	w_comment_text = "";
+var	w_post_id = "";
+function openEditArea(postAreaId) {
+	var	obj = document.getElementById(postAreaId);
+	var	postId = postAreaId.replace("reply_", "");
+
+	if("" == w_post_id && "" == w_comment_text) {
+		//수정 textarea영역에 출력할 내용 추출
+		var	org_text = "";
+		try {
+			org_text = document.getElementById("post_org_text_" + postId).innerHTML;
+			if("" != org_text.replace(/" "/gi, "")) { w_comment_text = org_text; }
+		}
+		catch(e) { w_comment_text = obj.innerHTML; }
+
+		var	tmp_comment = w_comment_text.replace(/<br>/gi, "\n").replace(/<br \/>/gi, "");
+		try { tmp_comment = tmp_comment.trim(); }
+		catch(e) { tmp_comment = tmp_comment.replace(/^\s+|\s+$/g,""); }
+		w_post_id = postId;
+		var	html_text = "<textarea name='tmpValue' id='editCommentField' rows='5' cols='5' style='width:99%'>"
+				+ tmp_comment
+				+ "</textarea>"
+				+ "<div style='float:right'>"
+				+ "<a href=\"javascript:openEditArea('" + postAreaId + "')\">"
+				+ "<img src='/images/common/btn/CommCBtnCancel.gif' alt='cancel' /></a> "
+				+ "<a href=\"javascript:saveComment('" + postId + "')\">"
+				+ "<img src='/images/common/btn/CommCBtnSave.gif' alt='save' /></a>"
+				+ "</div>";
+		obj.innerHTML = html_text;
+		document.getElementById("editCommentField").focus();
+	}
+	else if(w_post_id == postId) {
+		obj.innerHTML = w_comment_text;
+		w_comment_text = "";
+		w_post_id = "";
+	}
+	else {
+		alert("${gls.getMessage('Community.Msg.CloseReplyBox')}");
+	}
+}
+
+function saveComment(postId) {
+	tf = document.editreply;
+
+	tf.post_id.value = postId;
+	tf.message.value = tf.tmpValue.value;
+
+	validatePostForm(tf);
+}
+
+/***** 덧글수정을 위한 처리 end *****/

@@ -1,0 +1,69 @@
+var	domainName = "dibrary.net";
+var	siteName = "dibrary";
+var	memberDomain = "http://member.dibrary.net";
+
+function memberPopup(mypage, myname, w, h, scroll, option) {
+	document.domain = domainName;
+    var LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+    var TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+    var settings = 'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+option;
+    window.open(mypage,myname,settings);
+    return;
+}
+
+//로그인
+function memberLogin() {
+	memberPopup(memberDomain + '/login.do?mode=form&site=' + siteName, 'login', '1000', '700', 'yes', '');
+}
+function memberLoginKey() {
+	if (event.keyCode == 13) { memberLogin(); }
+}
+
+//로그아웃
+function memberLogout() {
+	memberPopup(memberDomain + '/logout.do?site=' + siteName, 'login', '1000', '700', 'yes', '');
+}
+function memberLogoutKey() {
+	if (event.keyCode == 13) { memberLogout(); }
+}
+
+//회원가입
+function memberReg() {
+	memberPopup(memberDomain + '/memberJoin.do?mode=agree&site=' + siteName, 'login', '1000', '700', 'yes', '');
+}
+function memberRegKey() {
+	if (event.keyCode == 13) { memberReg(); }
+}
+
+//회원수정
+function memberEdit() {
+	memberPopup(memberDomain + '/login.do?mode=form&site=' + siteName + '&beforeUrl=/memberInfoModify.do', 'login', '1000', '700', 'yes', '');
+	return false;
+}
+function memberEditKey() {
+	if (event.keyCode == 13) { memberEdit(); return false; }
+}
+
+//회원탈퇴
+function memberDel() {
+	memberPopup(memberDomain + '/memberWithdraw.do?mode=form&site=' + siteName, 'login', '1000', '700', 'yes', '');
+}
+function memberDelKey() {
+	if (event.keyCode == 13) { memberDel(); }
+}
+
+//아이디찾기
+function memberFindId() {
+	memberPopup(memberDomain + '/findId.do?mode=form&site=' + siteName, 'login', '1000', '700', 'yes', '');
+}
+function memberFindIdKey() {
+	if (event.keyCode == 13) { memberFindId(); }
+}
+
+//비밀번호 찾기
+function memberFindPwd() {
+	memberPopup(memberDomain + '/findPassword.do?mode=form&site=' + siteName, 'login', '1000', '700', 'yes', '');
+}
+function memberFindPwdKey() {
+	if (event.keyCode == 13) { memberFindPwd(); }
+}

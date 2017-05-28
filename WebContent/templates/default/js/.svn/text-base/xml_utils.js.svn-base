@@ -1,0 +1,184 @@
+
+$(function(){
+	$('div[id^=div_]').each(function() {
+		var modeStr = $(this).attr('id').replace(/div_/g, '');
+		$(document.createElement(modeStr)).attr('id', modeStr)
+			.attr('title', '').attr('totalcol', 0).appendTo($(this).children('div.xml'));
+	});
+	prepareXML();
+
+	$('#mode_include_all').click(function() {
+		$('.mode_include').attr('checked', this.checked);
+		prepareXML();
+	});
+	$('.mode_include').click(function() {
+		prepareXML();
+	});
+	$('input[name=mode_edit]').click(function() {
+		$('div[id^=div_]').css('display', 'none');
+		$('#div_' + modeVal()).css('display', '');
+
+		prepareHTML();
+	});
+	$('input:button[value=+]').click(function() {
+		$(this).parents('tr').clone(true).insertAfter($(this).parents('tr'));
+
+		$(this).parents('table').find('input[value=-]:eq(1)').css('display', '');
+	});
+	$('input:button[value=-]').click(function() {
+		$(this).parents('tr').remove();
+	});
+	$('input:button[value=test]').click(function() {
+		ajax_get_message('test', $(this).prev('input:text').val());
+	});
+	$('input:button[value=apply]').click(function() {
+		makeXML();
+		ajax_get_message('apply');
+
+		prepareXML();
+		prepareHTML();
+	});
+	$('input:text.size').blur(function() {
+		if(isNaN($(this).val()))
+		{
+			alert('Please, type only number!');
+			$(this).focus();
+		}
+	});
+});
+
+function modeVal()
+{
+	return $('input[name=mode_edit]:checked').val();
+}
+
+function prepareXML()
+{
+	var xmlStr = '<?xml version="1.0" encoding="ISO-8859-1"?><defines>';
+
+	for (var i = 0; i < $('.mode_include').length; i++)
+	{
+		if (!($('input[name=mode_edit]')[i].disabled = !$('.mode_include')[i].checked))
+			xmlStr += $('div.xml:eq(' + i + ')').html();
+	}
+	xmlStr = xmlStr.replace(/>[\s]*<\/(method|column)>/g, '/>');
+	xmlStr = xmlStr.replace(/(name=".*?"[\s]?)>/g, '$1/>');
+
+	$('textarea.xml').val(style_html(xmlStr + '</defines>', 4));
+}
+
+function prepareHTML()
+{
+	$('textarea.html').val(style_html($('#div_' + modeVal() + ' div.preview').html(), 4));
+}
+
+function ajax_get_message(ajax_mode, titleStr)
+{
+	if (ajax_mode == 'test')
+	{
+		var dataObj = {
+			template_name: 'xml_utils_ajax.js',
+			ajax_mode: ajax_mode,
+			titleStr: titleStr
+		};
+	}else if (ajax_mode == 'apply')
+	{
+		var page_title = $('#div_' + modeVal() + ' input.title:first').val();
+		var method_title = '';
+		$('#div_' + modeVal() + ' table.method input:text.title').each(function() {
+			method_title += $(this).val() + '-_-';
+		});
+		var element_title = '';
+		$('#div_' + modeVal() + ' table.element input:text.title').each(function() {
+			element_title += $(this).val() + '-_-';
+		});
+		var dataObj = {
+			template_name: 'xml_utils_ajax.js',
+			ajax_mode: ajax_mode,
+			page_title: page_title,
+			method_title: method_title,
+			element_title: element_title
+		};
+	}
+
+	$.ajax({
+		type:"POST",
+		url:CONTEXTPATH + "/dportal" + SERVLET_EXTENSION + "?module=ajax&action=getMessage",
+		data:dataObj,
+		dataType:"script",
+		global:false
+	});
+}
+
+function makeXML()
+{
+	$('#' + modeVal()).empty();
+	$('#div_' +modeVal() + ' table.method tbody tr').each(function() {
+		var newElement = $('<method />');
+		newElement.attr('parent', modeVal()).attr('module', 'XMLAction');
+		newElement.attr('action', $(this).find('.action').val());
+		newElement.attr('type', $(this).find('.type').val());
+		newElement.attr('title', $(this).find('.title').val());
+		newElement.attr('actiontype', $(this).find('.actiontype').val());
+		$('#' + modeVal()).append(newElement);
+	});
+
+	$('#' + modeVal()).attr('totalcol', $('#div_' + modeVal() + ' tr.element').length);
+	$(modeVal() == 'list' ? '#listHeader' : '#div_' + modeVal() + ' div.preview table').empty();
+	var column_input = (modeVal() == 'list') ? 'column' : 'input';
+	var order = 1;
+	$('#div_' + modeVal() + ' tr.element').each(function() {
+		var newElement = $(document.createElement(column_input));
+		newElement.attr('parent', modeVal()).attr('order', order);
+		if (modeVal() != 'list')
+			newElement.attr('essential', 'Y');
+		newElement.attr('title', $(this).find('.title').val());
+		newElement.attr('type', $(this).find('.type').val());
+		if (modeVal() != 'list')
+		{
+			newElement.attr('dbtype', $(this).find('.dbtype').val());
+			newElement.attr('size', $(this).find('.size').val());
+			newElement.attr('name', newElement.attr('title').toLowerCase().replace(/\./g, '_'));
+		}
+		$('#' + modeVal()).append(newElement);
+
+		if (modeVal() == 'list')
+			$('#listHeader').append($('<th></th>').html(newElement.attr('title')));
+		else
+		{
+			var cell_1 = $('<td></td>').html('<b></b>');
+			cell_1.css('background-color', '#F7F5E0').css('width', '15%');
+
+			var type = $(this).find('.type').val();
+			var newText = $(type == 'textarea' ? '<textarea />' : '<input type="' + type + '" />');
+			if (type == 'text')
+				newText.attr('size', $(this).find('.size').val());
+			newText.attr('tabindex', order);
+			var cell_2 = $('<td></td>').append(newText);
+			var newRow = $('<tr></tr>').append(cell_1).append(cell_2);
+			$('#div_' + modeVal() + ' div.preview table').append(newRow);
+		}
+		order++;
+	});
+}
+
+//http://www.oracle.com/technology/global/kr/pub/columns/oracle_nls_3.html
+function to_native2ascii(s)
+{	
+	var len = s.length;
+	var i;
+	var c;
+	var charval;
+	var result = "";
+
+	for(i=0; i < len; i++) {
+            c = s.charCodeAt(i);
+            charval = s.charAt(i);
+            if(c < 128) {
+                result = result + charval;
+            } else {
+                result = result + "\\u"+c.toString(16);
+            }
+        }
+	return result;
+}
